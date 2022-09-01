@@ -8,6 +8,9 @@ import {
 import { addCard, deleteCard, editCard } from "../storage/card";
 
 interface Cards {
+  cards: ICard[];
+  setCards: (cards: ICard[]) => void;
+
   addCardModalVisible: boolean;
   toggleAddCardModal: () => void;
   onAddCard: (props: ICardAddProps) => Promise<void>;
@@ -22,9 +25,15 @@ interface Cards {
 
   showMeanOfWord: Record<number, boolean>;
   toggleShowMeanOfWord: (index: number) => void;
+  toggleShowAllCards: () => void;
+  showAll: boolean;
 }
 
 export const useCardsStore = create<Cards>()((set) => ({
+  cards: [],
+
+  setCards: (cards: ICard[]) => set((state) => ({ ...state, cards })),
+
   addCardModalVisible: false,
 
   toggleAddCardModal: () =>
@@ -75,4 +84,20 @@ export const useCardsStore = create<Cards>()((set) => ({
         [index]: !state.showMeanOfWord[index],
       },
     })),
+
+  toggleShowAllCards: () =>
+    set((state) => {
+      let newShowMeanOfWord: Cards["showMeanOfWord"] = {};
+
+      state.cards.forEach((_, index) => {
+        newShowMeanOfWord[index] = !state.showAll;
+      });
+      return {
+        ...state,
+        showMeanOfWord: newShowMeanOfWord,
+        showAll: !state.showAll,
+      };
+    }),
+
+  showAll: false,
 }));

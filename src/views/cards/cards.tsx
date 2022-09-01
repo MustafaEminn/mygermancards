@@ -47,6 +47,20 @@ const Header = styled.div`
   align-items: center;
 `;
 
+const HeaderButtons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  & > * {
+    margin: 0 0.5rem;
+  }
+
+  & > *:last-child {
+    margin-right: 0;
+  }
+`;
+
 const SubmitButtonContainer = styled(Form.Item)`
   & .ant-form-item-control-input-content {
     display: flex;
@@ -117,8 +131,6 @@ const MenuIconButton = styled(Button)`
 `;
 
 const CardsView = () => {
-  const [cards, setCards] = useState<ICard[]>([]);
-
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -127,6 +139,9 @@ const CardsView = () => {
   }));
 
   const {
+    cards,
+    setCards,
+
     addCardModalVisible,
     toggleAddCardModal,
     onAddCard,
@@ -141,7 +156,13 @@ const CardsView = () => {
 
     toggleShowMeanOfWord,
     showMeanOfWord,
+
+    showAll,
+    toggleShowAllCards,
   } = useCardsStore((state) => ({
+    cards: state.cards,
+    setCards: state.setCards,
+
     addCardModalVisible: state.addCardModalVisible,
     toggleAddCardModal: state.toggleAddCardModal,
     onAddCard: state.onAddCard,
@@ -156,6 +177,9 @@ const CardsView = () => {
 
     showMeanOfWord: state.showMeanOfWord,
     toggleShowMeanOfWord: state.toggleShowMeanOfWord,
+
+    toggleShowAllCards: state.toggleShowAllCards,
+    showAll: state.showAll,
   }));
 
   useEffect(() => {
@@ -214,20 +238,25 @@ const CardsView = () => {
     <Layout>
       <Container>
         <Header>
-          <h1>Cards</h1>
+          <h1>Cards ({cards.length})</h1>
+          <HeaderButtons>
+            <Button type="primary" onClick={toggleAddCardModal}>
+              Add Card
+            </Button>
 
-          <Button type="primary" onClick={toggleAddCardModal}>
-            Add Card
-          </Button>
+            <Button type="primary" onClick={toggleShowAllCards}>
+              {showAll ? "Hide" : "Show"} all cards
+            </Button>
+          </HeaderButtons>
         </Header>
-        <Row gutter={10}>
+        <Row gutter={[10, 10]}>
           {cards.length === 0 ? (
             <Typography.Title level={1}>
               There is no card. You can add new word card with add card button
             </Typography.Title>
           ) : (
             cards.map((card, index) => (
-              <Col key={index} lg={6} md={12} sm={24}>
+              <Col key={index} lg={6} md={12} sm={24} xs={24}>
                 <CardContainer>
                   <CardHeadContainer>
                     <Dropdown

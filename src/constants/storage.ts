@@ -1,3 +1,5 @@
+import { ArticlesSelectEnum } from "./components/UI/articles_select";
+
 export enum EStorage {
   PACKAGES = "packages",
   CARD_IDS = "cardIds",
@@ -23,7 +25,7 @@ export interface IPackageDeleteProps extends Pick<IPackage, "name"> {}
 export interface ICard {
   id: string;
   cardsId: string;
-  article: string;
+  article: ArticlesSelectEnum;
   word: string;
   meanOfWord: string;
   doMemorized: boolean;
